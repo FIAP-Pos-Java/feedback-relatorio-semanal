@@ -51,7 +51,6 @@ public class FeedbackRepository {
 
             DynamoDbTable<Feedback> table = getTable();
             
-            // Em produção, considere usar GSI para melhor performance
             List<Feedback> feedbacks = table.scan(ScanEnhancedRequest.builder().build())
                 .items()
                 .stream()

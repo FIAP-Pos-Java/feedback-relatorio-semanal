@@ -54,7 +54,7 @@ public class RelatorioService {
 
         double mediaNotas = somaNotas / total;
 
-        return new RelatorioEstatisticas(mediaNotas, total, totalCriticos, totalNormais        );
+        return new RelatorioEstatisticas(mediaNotas, total, totalCriticos, totalNormais);
     }
 
     private void gerarLogRelatorio(RelatorioEstatisticas estatisticas, int totalFeedbacks) {
