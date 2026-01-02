@@ -5,10 +5,9 @@ import com.feedback.model.Feedback;
 import com.feedback.repository.FeedbackRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.logging.Logger;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -20,12 +19,8 @@ public class RelatorioService {
     @Inject
     FeedbackRepository feedbackRepository;
 
-    @ConfigProperty(name = "dynamodb.table.name", defaultValue = "feedbacks")
-    String tableName;
-
     public void gerarRelatorioSemanal() {
         LOG.info("Iniciando geração de relatório semanal de feedbacks");
-        feedbackRepository.initTableName(tableName);
         List<Feedback> feedbacks = feedbackRepository.buscarPorPeriodo(7);
         RelatorioEstatisticas estatisticas = calcularEstatisticas(feedbacks);
         gerarLogRelatorio(estatisticas, feedbacks.size());
@@ -58,13 +53,11 @@ public class RelatorioService {
     }
 
     private void gerarLogRelatorio(RelatorioEstatisticas estatisticas, int totalFeedbacks) {
-        Instant agora = Instant.now();
-        Instant inicioPeriodo = agora.minus(7, java.time.temporal.ChronoUnit.DAYS);
+        LocalDateTime agora = LocalDateTime.now();
+        LocalDateTime inicioPeriodo = agora.minusDays(7);
         
-        String dataInicio = DateTimeFormatter.ISO_LOCAL_DATE
-            .format(inicioPeriodo.atZone(java.time.ZoneId.systemDefault()));
-        String dataFim = DateTimeFormatter.ISO_LOCAL_DATE
-            .format(agora.atZone(java.time.ZoneId.systemDefault()));
+        String dataInicio = DateTimeFormatter.ISO_LOCAL_DATE.format(inicioPeriodo);
+        String dataFim = DateTimeFormatter.ISO_LOCAL_DATE.format(agora);
 
         LOG.infof(
             "\n" +

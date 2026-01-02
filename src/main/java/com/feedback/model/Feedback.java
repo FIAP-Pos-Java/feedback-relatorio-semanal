@@ -1,25 +1,37 @@
 package com.feedback.model;
 
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute;
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortKey;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import io.quarkus.runtime.annotations.RegisterForReflection;
+import jakarta.persistence.*;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
-@DynamoDbBean
-public class Feedback {
+@Entity
+@Table(name = "feedbacks")
+@RegisterForReflection
+public class Feedback extends PanacheEntityBase {
 
-    private String id;
-    private String descricao;
-    private Integer nota;
-    private String dataCriacao;
-    private Boolean critico;
+    @Id
+    @Column(length = 36)
+    public String id;
+
+    @Column(nullable = false, length = 1000)
+    public String descricao;
+
+    @Column(nullable = false)
+    public Integer nota;
+
+    @Column(name = "data_criacao", nullable = false)
+    public LocalDateTime dataCriacao;
+
+    @Column(nullable = false)
+    public Boolean critico;
 
     public Feedback() {
     }
 
-    public Feedback(String id, String descricao, Integer nota, String dataCriacao, Boolean critico) {
+    public Feedback(String id, String descricao, Integer nota, LocalDateTime dataCriacao, Boolean critico) {
         this.id = id;
         this.descricao = descricao;
         this.nota = nota;
@@ -27,8 +39,6 @@ public class Feedback {
         this.critico = critico;
     }
 
-    @DynamoDbPartitionKey
-    @DynamoDbAttribute("id")
     public String getId() {
         return id;
     }
@@ -37,7 +47,6 @@ public class Feedback {
         this.id = id;
     }
 
-    @DynamoDbAttribute("descricao")
     public String getDescricao() {
         return descricao;
     }
@@ -46,7 +55,6 @@ public class Feedback {
         this.descricao = descricao;
     }
 
-    @DynamoDbAttribute("nota")
     public Integer getNota() {
         return nota;
     }
@@ -55,17 +63,14 @@ public class Feedback {
         this.nota = nota;
     }
 
-    @DynamoDbSortKey
-    @DynamoDbAttribute("dataCriacao")
-    public String getDataCriacao() {
+    public LocalDateTime getDataCriacao() {
         return dataCriacao;
     }
 
-    public void setDataCriacao(String dataCriacao) {
+    public void setDataCriacao(LocalDateTime dataCriacao) {
         this.dataCriacao = dataCriacao;
     }
 
-    @DynamoDbAttribute("critico")
     public Boolean getCritico() {
         return critico;
     }
@@ -75,8 +80,8 @@ public class Feedback {
     }
 
     public static Feedback fromRequest(String descricao, Integer nota) {
-        String id = java.util.UUID.randomUUID().toString();
-        String dataCriacao = Instant.now().toString();
+        String id = UUID.randomUUID().toString();
+        LocalDateTime dataCriacao = LocalDateTime.now();
         Boolean critico = nota <= 3;
         
         return new Feedback(id, descricao, nota, dataCriacao, critico);
