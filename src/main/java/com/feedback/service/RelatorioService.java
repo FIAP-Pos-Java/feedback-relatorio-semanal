@@ -37,9 +37,12 @@ public class RelatorioService {
 
         for (Feedback feedback : feedbacks) {
             somaNotas += feedback.getNota();
+
             if (feedback.getCritico() != null && feedback.getCritico()) {
                 totalCriticos++;
-            } else {
+            } 
+            else 
+            {
                 totalNormais++;
             }
         }
@@ -60,11 +63,11 @@ public class RelatorioService {
             "╔══════════════════════════════════════════════════════════════╗\n" +
             "║           RELATÓRIO SEMANAL DE FEEDBACKS                     ║\n" +
             "╠══════════════════════════════════════════════════════════════╣\n" +
-            "║ Período: %s a %s                                    ║\n" +
-            "║ Total de Feedbacks: %d                                        ║\n" +
-            "║ Média das Notas: %.2f/10                                      ║\n" +
-            "║ Feedbacks Críticos (nota ≤ 3): %d                             ║\n" +
-            "║ Feedbacks Normais (nota > 3): %d                              ║\n" +
+            "║ Período: %s a %s                                             ║\n" +
+            "║ Total de Feedbacks: %d                                       ║\n" +
+            "║ Média das Notas: %.2f/10                                     ║\n" +
+            "║ Feedbacks Críticos (nota ≤ 3): %d                            ║\n" +
+            "║ Feedbacks Normais (nota > 3): %d                             ║\n" +
             "╚══════════════════════════════════════════════════════════════╝",
             dataInicio,
             dataFim,
