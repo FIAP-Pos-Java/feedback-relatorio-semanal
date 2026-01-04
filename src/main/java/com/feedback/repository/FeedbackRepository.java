@@ -18,9 +18,10 @@ public class FeedbackRepository implements PanacheRepositoryBase<Feedback, Strin
     public Feedback salvar(Feedback feedback) {
         try {
             persist(feedback);
-            LOG.infof("Feedback salvo com sucesso. ID: %s", feedback.getId());
             return feedback;
-        } catch (Exception e) {
+        } 
+        catch (Exception e) 
+        {
             LOG.errorf(e, "Erro ao salvar feedback. ID: %s", feedback.getId());
             throw new RuntimeException("Erro ao salvar feedback", e);
         }
@@ -28,14 +29,12 @@ public class FeedbackRepository implements PanacheRepositoryBase<Feedback, Strin
 
     public List<Feedback> buscarPorPeriodo(int dias) {
         try {
-            LocalDateTime dataLimite = LocalDateTime.now().minusDays(dias);
-            
-            List<Feedback> feedbacks = find("dataCriacao >= ?1", dataLimite).list();
-            
-            LOG.infof("Encontrados %d feedbacks nos últimos %d dias", feedbacks.size(), dias);
-            return feedbacks;
-        } catch (Exception e) {
-            LOG.errorf(e, "Erro ao buscar feedbacks por período. Dias: %d", dias);
+            var dataLimite = LocalDateTime.now().minusDays(dias);
+            return find("dataCriacao >= ?1", dataLimite).list();
+        } 
+        catch (Exception e) 
+        {
+            LOG.errorf(e, "Erro ao buscar feedbacks. Dias: %d", dias);
             throw new RuntimeException("Erro ao buscar feedbacks", e);
         }
     }
@@ -43,7 +42,9 @@ public class FeedbackRepository implements PanacheRepositoryBase<Feedback, Strin
     public Feedback buscarPorId(String id) {
         try {
             return findById(id);
-        } catch (Exception e) {
+        } 
+        catch (Exception e) 
+        {
             LOG.errorf(e, "Erro ao buscar feedback. ID: %s", id);
             throw new RuntimeException("Erro ao buscar feedback", e);
         }

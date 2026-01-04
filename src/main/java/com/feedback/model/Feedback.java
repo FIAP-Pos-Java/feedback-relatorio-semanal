@@ -80,10 +80,10 @@ public class Feedback extends PanacheEntityBase {
     }
 
     public static Feedback fromRequest(String descricao, Integer nota) {
-        String id = UUID.randomUUID().toString();
-        LocalDateTime dataCriacao = LocalDateTime.now();
-        Boolean critico = nota <= 3;
-        
+        var id = UUID.randomUUID().toString();
+        var dataCriacao = LocalDateTime.now();
+        var critico = nota <= 3;
+
         return new Feedback(id, descricao, nota, dataCriacao, critico);
     }
 }

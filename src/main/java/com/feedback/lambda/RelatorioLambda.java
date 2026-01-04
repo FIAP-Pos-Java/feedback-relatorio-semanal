@@ -18,13 +18,11 @@ public class RelatorioLambda {
     @Funq
     public void gerarRelatorioSemanal(EventBridgeEvent event) {
         try {
-            LOG.info("Iniciando execução do relatório semanal agendado");
-            
             relatorioService.gerarRelatorioSemanal();
-            
-            LOG.info("Relatório semanal executado com sucesso");
-        } catch (Exception e) {
-            LOG.errorf(e, "Erro ao executar relatório semanal");
+        } 
+        catch (Exception e) 
+        {
+            LOG.errorf(e, "Erro ao gerar relatorio semanal");
             throw new RuntimeException("Erro ao gerar relatório semanal", e);
         }
     }

@@ -20,12 +20,9 @@ public class RelatorioService {
     FeedbackRepository feedbackRepository;
 
     public void gerarRelatorioSemanal() {
-        LOG.info("Iniciando geração de relatório semanal de feedbacks");
-        List<Feedback> feedbacks = feedbackRepository.buscarPorPeriodo(7);
-        RelatorioEstatisticas estatisticas = calcularEstatisticas(feedbacks);
+        var feedbacks = feedbackRepository.buscarPorPeriodo(7);
+        var estatisticas = calcularEstatisticas(feedbacks);
         gerarLogRelatorio(estatisticas, feedbacks.size());
-
-        LOG.info("Relatório semanal gerado com sucesso");
     }
 
     private RelatorioEstatisticas calcularEstatisticas(List<Feedback> feedbacks) {
@@ -33,10 +30,10 @@ public class RelatorioService {
             return new RelatorioEstatisticas(0.0, 0, 0, 0);
         }
 
-        double somaNotas = 0.0;
-        int totalCriticos = 0;
-        int totalNormais = 0;
-        int total = feedbacks.size();
+        var somaNotas = 0.0;
+        var totalCriticos = 0;
+        var totalNormais = 0;
+        var total = feedbacks.size();
 
         for (Feedback feedback : feedbacks) {
             somaNotas += feedback.getNota();
@@ -47,17 +44,16 @@ public class RelatorioService {
             }
         }
 
-        double mediaNotas = somaNotas / total;
-
+        var mediaNotas = somaNotas / total;
         return new RelatorioEstatisticas(mediaNotas, total, totalCriticos, totalNormais);
     }
 
     private void gerarLogRelatorio(RelatorioEstatisticas estatisticas, int totalFeedbacks) {
-        LocalDateTime agora = LocalDateTime.now();
-        LocalDateTime inicioPeriodo = agora.minusDays(7);
-        
-        String dataInicio = DateTimeFormatter.ISO_LOCAL_DATE.format(inicioPeriodo);
-        String dataFim = DateTimeFormatter.ISO_LOCAL_DATE.format(agora);
+        var agora = LocalDateTime.now();
+        var inicioPeriodo = agora.minusDays(7);
+
+        var dataInicio = DateTimeFormatter.ISO_LOCAL_DATE.format(inicioPeriodo);
+        var dataFim = DateTimeFormatter.ISO_LOCAL_DATE.format(agora);
 
         LOG.infof(
             "\n" +
